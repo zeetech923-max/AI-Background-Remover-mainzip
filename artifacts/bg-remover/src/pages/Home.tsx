@@ -107,8 +107,8 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[2.5rem] rotate-3 blur-2xl opacity-50" />
               <div className="absolute inset-0 rounded-3xl p-1 bg-gradient-to-br from-white/40 to-white/5 dark:from-white/10 dark:to-white/0 backdrop-blur-sm shadow-2xl">
                 <BeforeAfterSlider
-                  beforeImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
-                  afterImage="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80"
+                  beforeImage={`${import.meta.env.BASE_URL}hero-before.jpg`}
+                  afterImage={`${import.meta.env.BASE_URL}hero-after.png`}
                   className="w-full h-full rounded-[1.4rem]"
                 />
               </div>
