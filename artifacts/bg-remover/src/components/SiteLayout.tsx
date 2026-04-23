@@ -1,9 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useTheme } from "@/components/theme-provider";
-import { Sparkles, Sun, Moon, Menu, X, Twitter, Github, Linkedin, Shield, Lock, Download } from "lucide-react";
+import { Sparkles, Sun, Moon, Menu, X, Twitter, Github, Linkedin, Shield, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+
+function PlayStoreIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-hidden="true">
+      <defs>
+        <linearGradient id="hdr-play-a" x1="6" y1="3" x2="22" y2="16" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#00C3FF" />
+          <stop offset="1" stopColor="#1BE2FA" />
+        </linearGradient>
+        <linearGradient id="hdr-play-b" x1="6" y1="29" x2="22" y2="16" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#FFCE00" />
+          <stop offset="1" stopColor="#FFEA00" />
+        </linearGradient>
+        <linearGradient id="hdr-play-c" x1="22" y1="3" x2="22" y2="29" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#DE2453" />
+          <stop offset="1" stopColor="#FE3944" />
+        </linearGradient>
+        <linearGradient id="hdr-play-d" x1="6" y1="3" x2="6" y2="29" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#11D574" />
+          <stop offset="1" stopColor="#01F176" />
+        </linearGradient>
+      </defs>
+      <path d="M6.5 3.2 L19.5 11 L15.6 14.7 Z" fill="url(#hdr-play-a)" />
+      <path d="M6.5 28.8 L19.5 21 L15.6 17.3 Z" fill="url(#hdr-play-b)" />
+      <path d="M19.5 11 L25.5 14.5 C26.6 15.2 26.6 16.8 25.5 17.5 L19.5 21 L15.6 16 Z" fill="url(#hdr-play-c)" />
+      <path d="M6.5 3.2 L15.6 16 L6.5 28.8 C5.9 28.5 5.5 27.9 5.5 27.2 L5.5 4.8 C5.5 4.1 5.9 3.5 6.5 3.2 Z" fill="url(#hdr-play-d)" />
+    </svg>
+  );
+}
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -64,7 +93,7 @@ function useInstallPrompt() {
     setDeferred(null);
   };
 
-  return { canInstall: !!deferred && !installed, installed, install };
+  return { canInstall: !installed, installed, install };
 }
 
 const NAV_LINKS = [
@@ -126,7 +155,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                 variant="outline"
                 className="rounded-full px-4 h-9 font-semibold gap-1.5"
               >
-                <Download className="w-4 h-4" /> Install App
+                <PlayStoreIcon className="w-4 h-4" /> Install App
               </Button>
             )}
             <Link href="/remove">
@@ -165,7 +194,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                     variant="outline"
                     className="w-full rounded-full font-semibold gap-1.5"
                   >
-                    <Download className="w-4 h-4" /> Install App
+                    <PlayStoreIcon className="w-4 h-4" /> Install App
                   </Button>
                 )}
                 <Link href="/remove">
