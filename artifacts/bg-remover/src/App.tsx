@@ -12,6 +12,8 @@ import Articles from "@/pages/Articles";
 import ArticleDesignTips from "@/pages/ArticleDesignTips";
 import ArticleEcommerceGuide from "@/pages/ArticleEcommerceGuide";
 import ArticleAIvsManual from "@/pages/ArticleAIvsManual";
+import ArticlePost from "@/pages/ArticlePost";
+import Admin from "@/pages/Admin";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Security from "@/pages/Security";
@@ -30,6 +32,8 @@ function Router() {
       <Route path="/articles/design-tips" component={ArticleDesignTips} />
       <Route path="/articles/ecommerce-guide" component={ArticleEcommerceGuide} />
       <Route path="/articles/ai-vs-manual" component={ArticleAIvsManual} />
+      <Route path="/articles/:slug" component={ArticlePost} />
+      <Route path="/admin" component={Admin} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
       <Route path="/security" component={Security} />

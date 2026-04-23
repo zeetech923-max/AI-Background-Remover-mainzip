@@ -1,7 +1,9 @@
 import { Link } from "wouter";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import SiteLayout from "@/components/SiteLayout";
 import { ArrowRight, Clock, Tag } from "lucide-react";
+import { adminApi, type Post } from "@/lib/adminApi";
 
 const ARTICLES = [
   {
@@ -38,7 +40,43 @@ const ARTICLES = [
 
 const CATEGORIES = ["All", "Design", "E-commerce", "Technology"];
 
+function formatDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  } catch {
+    return "";
+  }
+}
+
+const DB_COLORS = [
+  "from-pink-500/20 to-amber-500/20",
+  "from-cyan-500/20 to-blue-500/20",
+  "from-purple-500/20 to-fuchsia-500/20",
+  "from-emerald-500/20 to-lime-500/20",
+];
+
 export default function Articles() {
+  const [dbPosts, setDbPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    adminApi.listPosts().then((r) => setDbPosts(r.posts.filter((p) => p.published))).catch(() => {});
+  }, []);
+
+  const all = [
+    ...dbPosts.map((p, i) => ({
+      slug: p.slug,
+      href: `/articles/${p.slug}`,
+      category: "Blog",
+      title: p.title,
+      excerpt: p.excerpt || "",
+      readTime: `${Math.max(2, Math.round((p.content || "").split(/\s+/).length / 200))} min read`,
+      date: formatDate(p.createdAt),
+      color: DB_COLORS[i % DB_COLORS.length],
+      coverImageUrl: p.coverImageUrl,
+    })),
+    ...ARTICLES.map((a) => ({ ...a, coverImageUrl: null as string | null })),
+  ];
+
   return (
     <SiteLayout>
       <div className="container mx-auto px-4 md:px-6 py-16 max-w-5xl">
@@ -59,7 +97,7 @@ export default function Articles() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {ARTICLES.map((article, i) => (
+          {all.map((article, i) => (
             <motion.div
               key={article.slug}
               initial={{ opacity: 0, y: 20 }}
@@ -68,9 +106,15 @@ export default function Articles() {
             >
               <Link href={article.href}>
                 <a className="group block rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-lg transition-all overflow-hidden">
-                  <div className={`h-36 bg-gradient-to-br ${article.color} flex items-center justify-center`}>
-                    <Tag className="w-10 h-10 text-foreground/20" />
-                  </div>
+                  {article.coverImageUrl ? (
+                    <div className="h-36 overflow-hidden">
+                      <img src={article.coverImageUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    </div>
+                  ) : (
+                    <div className={`h-36 bg-gradient-to-br ${article.color} flex items-center justify-center`}>
+                      <Tag className="w-10 h-10 text-foreground/20" />
+                    </div>
+                  )}
                   <div className="p-5">
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-0.5 rounded-full">{article.category}</span>

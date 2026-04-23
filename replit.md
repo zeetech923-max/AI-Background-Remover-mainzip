@@ -4,6 +4,15 @@
 
 pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
 
+## Admin Panel (BGRemover AI)
+
+- Visit `/admin` on the published site to log in.
+- Default password: `admin123` (set the `ADMIN_PASSWORD` environment variable to change it).
+- Manages: blog posts (CRUD + publish toggle), image gallery, and site settings (hero text, etc.).
+- Backed by Postgres via Drizzle ORM in the `api-server` artifact. Schema lives in `lib/db/src/schema/index.ts`.
+- API routes under `/api`: `auth`, `posts`, `gallery`, `settings`. Admin routes are gated by an HMAC-signed cookie (`bgr_admin`).
+- Public Articles page (`/articles`) and post page (`/articles/:slug`) read published posts from the database.
+
 ## Stack
 
 - **Monorepo tool**: pnpm workspaces
