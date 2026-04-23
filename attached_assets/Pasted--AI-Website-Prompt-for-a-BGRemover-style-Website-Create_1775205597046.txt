@@ -1,0 +1,178 @@
+# AI Website Prompt for a BGRemover-style Website
+
+Create a modern, premium SaaS website exactly in the style of an AI background remover platform like bgremover.us.
+
+The website should look clean, minimal, futuristic, and highly professional.
+
+## Main Style
+
+* Use a white background with soft gray sections
+* Primary color: #2563EB (blue)
+* Secondary color: #0F172A (dark navy)
+* Accent color: #22C55E (green)
+* Rounded corners everywhere (16px to 24px)
+* Large shadows and smooth hover animations
+* Responsive design for desktop, tablet, and mobile
+* Use modern fonts like Inter or Poppins
+* Smooth scroll and subtle fade-in animations
+
+## Navbar
+
+Top sticky navigation with:
+
+* Logo on left: "BGRemover AI"
+* Menu links:
+
+  * Home
+  * Features
+  * Pricing
+  * Examples
+  * FAQ
+* Buttons on right:
+
+  * Login
+  * Sign Up
+
+Navbar should become slightly transparent with blur effect while scrolling.
+
+## Hero Section
+
+Create a large hero section with:
+
+* Big headline:
+  "Remove Image Backgrounds Instantly with AI"
+* Subheadline:
+  "Upload any photo and get a perfect transparent background in seconds. No Photoshop required."
+* Two buttons:
+
+  * "Upload Image"
+  * "Watch Demo"
+* Add a drag-and-drop upload card below the buttons
+* Upload card should include:
+
+  * Upload icon
+  * Text: "Drag & Drop your image here"
+  * Support text: "PNG, JPG, JPEG up to 25MB"
+
+On the right side of the hero section show a before/after image comparison slider.
+
+## Features Section
+
+Create 6 premium feature cards in a 3-column grid:
+
+1. Instant AI Background Removal
+2. Preserve Hair and Fine Edges
+3. Batch Upload up to 10 Images
+4. Transparent PNG and White Background Export
+5. Lightning Fast Processing
+6. Privacy Protected - Auto Delete Files
+
+Each card should have:
+
+* Icon
+* Title
+* Short description
+* Hover animation
+
+## How It Works Section
+
+Create a 3-step timeline:
+
+1. Upload your image
+2. AI removes the background automatically
+3. Download your transparent PNG
+
+Use large icons and connecting line between steps.
+
+## Before / After Showcase
+
+Create a section with 3 example cards.
+Each card should contain:
+
+* Before image
+* After image
+* A slider effect
+* Labels: Before / After
+
+Examples:
+
+* Person portrait
+* Product image
+* Car photo
+
+## Pricing Section
+
+Create 3 pricing cards:
+
+### Free Plan
+
+* 5 free image removals
+* Standard quality
+* Single image only
+* Button: Get Started
+
+### Pro Plan
+
+* $9/month
+* 500 image removals
+* HD quality
+* Batch processing
+* Faster AI
+* Button: Start Pro
+
+### Business Plan
+
+* $29/month
+* Unlimited removals
+* API access
+* Team collaboration
+* Priority support
+* Button: Contact Sales
+
+Highlight the Pro Plan with larger card and badge: "Most Popular"
+
+## Testimonials Section
+
+Create 3 testimonial cards with:
+
+* Profile image
+* Name
+* Profession
+* 5-star rating
+* Review text
+
+## FAQ Section
+
+Accordion style with these questions:
+
+* How does the AI remove backgrounds?
+* Which file formats are supported?
+* Is my uploaded image safe?
+* Can I use the result commercially?
+* Do you support batch uploads?
+
+## Footer
+
+Footer should contain:
+
+* Logo and short description
+* Links:
+
+  * Privacy Policy
+  * Terms
+  * Contact
+  * Blog
+* Social icons
+* Copyright text
+
+## Extra Requirements
+
+* Build using React + Tailwind CSS
+* Use Framer Motion for animations
+* Use Lucide icons
+* Include dark mode toggle
+* Add loading animation after image upload
+* Add subtle particle background in hero section
+* Entire design should feel like a premium startup website similar to remove.bg or bgremover.us
+* Code must be clean and production ready
+* Use reusable React components and organized sections
