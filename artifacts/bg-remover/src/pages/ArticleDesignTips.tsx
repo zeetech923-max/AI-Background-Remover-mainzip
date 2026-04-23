@@ -70,7 +70,7 @@ export default function ArticleDesignTips() {
               <h3 className="font-bold text-lg mb-1">Ready to apply these tips?</h3>
               <p className="text-muted-foreground text-sm mb-4">Use BGRemover AI to get a perfect transparent PNG in seconds — then bring it to life with any background.</p>
               <Link href="/remove">
-                <Button className="rounded-full font-semibold">Try it Free</Button>
+                <Button className="rounded-full font-semibold">Try it Now</Button>
               </Link>
             </div>
           </div>

@@ -105,7 +105,7 @@ export default function Features() {
             Everything you need.<br className="hidden md:block" /> Nothing you don't.
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            BGRemover AI is built from the ground up for professional-quality results — with no bloat, no subscriptions, and no compromises on accuracy.
+            BGRemover AI is built from the ground up for professional-quality results — with no bloat and no compromises on accuracy.
           </p>
         </motion.div>
 
@@ -135,10 +135,11 @@ export default function Features() {
         <div className="rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 p-10 text-center">
           <h2 className="text-2xl font-bold mb-3">See all features in action</h2>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto">Upload any image and experience the precision for yourself — no signup needed.</p>
+
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/remove">
               <Button size="lg" className="rounded-full font-semibold px-8 gap-2">
-                Try it Free <ArrowRight className="w-4 h-4" />
+                Try it Now <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <Link href="/how-it-works">

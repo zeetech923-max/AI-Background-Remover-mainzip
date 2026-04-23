@@ -1,12 +1,11 @@
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import SiteLayout from "@/components/SiteLayout";
-import { ArrowLeft, Clock, Zap, Timer, DollarSign, Star } from "lucide-react";
+import { ArrowLeft, Clock, Zap, Timer, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const COMPARISON = [
   { criterion: "Speed", ai: "2–5 seconds per image", manual: "5–30 minutes per image", winner: "ai" },
-  { criterion: "Cost", ai: "Free to low-cost", manual: "$5–$30 per image (freelancer)", winner: "ai" },
   { criterion: "Hair & Fur Detail", ai: "Excellent (sub-pixel accuracy)", manual: "Excellent (with time)", winner: "tie" },
   { criterion: "Complex Scenes", ai: "Good (90%+ accuracy)", manual: "Best — human judgment", winner: "manual" },
   { criterion: "Consistency", ai: "Perfectly consistent at scale", manual: "Varies by editor & fatigue", winner: "ai" },
@@ -61,10 +60,9 @@ export default function ArticleAIvsManual() {
             </table>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-4 mb-10">
+          <div className="grid md:grid-cols-2 gap-4 mb-10">
             {[
               { icon: Zap, title: "AI Wins On Speed", body: "At 2–5 seconds vs 5–30 minutes, AI is 300–600x faster. For batches of 50+ images, the difference is the gap between same-day delivery and a week-long project." },
-              { icon: DollarSign, title: "AI Wins On Cost", body: "A professional retoucher charges $5–$30 per image. AI processes the same image in seconds at near-zero cost. For high-volume use cases, there's no comparison." },
               { icon: Timer, title: "Manual Wins On Complexity", body: "For images with intricate overlapping subjects, unconventional scenes, or artistic requirements, human judgment remains unmatched — though the gap is narrowing fast." },
             ].map(({ icon: Icon, title, body }) => (
               <div key={title} className="rounded-2xl border border-border bg-card p-5">
@@ -77,7 +75,7 @@ export default function ArticleAIvsManual() {
 
           <h2 className="text-xl font-bold mb-4">Our Verdict</h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            For the vast majority of use cases — product photography, portraits, social media graphics, and e-commerce catalogs — AI background removal produces results that are <strong className="text-foreground">indistinguishable from manual editing</strong>, at a fraction of the time and cost.
+            For the vast majority of use cases — product photography, portraits, social media graphics, and e-commerce catalogs — AI background removal produces results that are <strong className="text-foreground">indistinguishable from manual editing</strong>, at a fraction of the time.
           </p>
           <p className="text-muted-foreground leading-relaxed mb-10">
             Reserve manual editing for hero campaign images, complex composites, or cases where a human art director's judgment is required. For everything else, AI is the clear choice in 2026.
@@ -89,7 +87,7 @@ export default function ArticleAIvsManual() {
               <h3 className="font-bold text-lg mb-1">See it for yourself</h3>
               <p className="text-muted-foreground text-sm mb-4">Try our AI model on your own images — no signup, no data sent to the cloud. Just instant, professional results.</p>
               <Link href="/remove">
-                <Button className="rounded-full font-semibold">Try the AI Tool Free</Button>
+                <Button className="rounded-full font-semibold">Try the AI Tool</Button>
               </Link>
             </div>
           </div>

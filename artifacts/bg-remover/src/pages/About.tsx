@@ -33,7 +33,7 @@ export default function About() {
               We make professional image editing<br className="hidden md:block" /> accessible to everyone
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              BGRemover AI was founded in 2023 with a simple belief: the tools used by $300/hour retouchers should be available to every creator, seller, and designer — for free, in seconds, with no skill required.
+              BGRemover AI was founded in 2023 with a simple belief: the tools used by elite retouchers should be available to every creator, seller, and designer — in seconds, with no skill required.
             </p>
           </div>
 
@@ -98,7 +98,7 @@ export default function About() {
             <h2 className="text-2xl font-bold mb-3">Ready to try it?</h2>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">Join over 50 million users who've made BGRemover AI part of their creative workflow.</p>
             <Link href="/remove">
-              <Button size="lg" className="rounded-full font-semibold px-8">Remove a Background Free</Button>
+              <Button size="lg" className="rounded-full font-semibold px-8">Remove a Background</Button>
             </Link>
           </div>
         </motion.div>
