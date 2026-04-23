@@ -1,9 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useTheme } from "@/components/theme-provider";
-import { Sparkles, Sun, Moon, Menu, X, Twitter, Github, Linkedin, Shield, Lock } from "lucide-react";
+import { Sparkles, Sun, Moon, Menu, X, Twitter, Github, Linkedin, Shield, Lock, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
+function useInstallPrompt() {
+  const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
+  const [installed, setInstalled] = useState(false);
+
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      // @ts-expect-error iOS Safari
+      window.navigator.standalone === true;
+    if (isStandalone) setInstalled(true);
+
+    const onPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferred(e as BeforeInstallPromptEvent);
+    };
+    const onInstalled = () => {
+      setInstalled(true);
+      setDeferred(null);
+    };
+    window.addEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("appinstalled", onInstalled);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", onInstalled);
+    };
+  }, []);
+
+  const install = async () => {
+    if (!deferred) return;
+    await deferred.prompt();
+    const choice = await deferred.userChoice;
+    if (choice.outcome === "accepted") setInstalled(true);
+    setDeferred(null);
+  };
+
+  return { canInstall: !!deferred && !installed, installed, install };
+}
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -16,6 +59,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
+  const { canInstall, install } = useInstallPrompt();
 
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 20);
@@ -57,6 +101,15 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
             >
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
+            {canInstall && (
+              <Button
+                onClick={install}
+                variant="outline"
+                className="rounded-full px-4 h-9 font-semibold gap-1.5"
+              >
+                <Download className="w-4 h-4" /> Install App
+              </Button>
+            )}
             <Link href="/remove">
               <Button className="rounded-full px-5 h-9 font-semibold">Upload Image</Button>
             </Link>
@@ -86,7 +139,16 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                   {label}
                 </Link>
               ))}
-              <div className="pt-3 border-t border-border mt-2">
+              <div className="pt-3 border-t border-border mt-2 space-y-2">
+                {canInstall && (
+                  <Button
+                    onClick={install}
+                    variant="outline"
+                    className="w-full rounded-full font-semibold gap-1.5"
+                  >
+                    <Download className="w-4 h-4" /> Install App
+                  </Button>
+                )}
                 <Link href="/remove">
                   <Button className="w-full rounded-full font-semibold">Upload Image</Button>
                 </Link>
