@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "-0ca4jpbjSec-zlh_gWyX"
+uri = "file://artifacts/bg-remover/public/hero-after.png"
+type = "image"
+title = "Current after image"
