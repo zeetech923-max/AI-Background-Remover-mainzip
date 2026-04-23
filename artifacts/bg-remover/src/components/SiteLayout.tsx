@@ -29,16 +29,35 @@ function useInstallPrompt() {
       setInstalled(true);
       setDeferred(null);
     };
+    const onTrigger = async () => {
+      if (!deferred) {
+        alert(
+          "To install: open this site in Chrome or Edge, then tap your browser menu → 'Install app' / 'Add to Home screen'.",
+        );
+        return;
+      }
+      await deferred.prompt();
+      const choice = await deferred.userChoice;
+      if (choice.outcome === "accepted") setInstalled(true);
+      setDeferred(null);
+    };
     window.addEventListener("beforeinstallprompt", onPrompt);
     window.addEventListener("appinstalled", onInstalled);
+    window.addEventListener("bgremover:install", onTrigger);
     return () => {
       window.removeEventListener("beforeinstallprompt", onPrompt);
       window.removeEventListener("appinstalled", onInstalled);
+      window.removeEventListener("bgremover:install", onTrigger);
     };
-  }, []);
+  }, [deferred]);
 
   const install = async () => {
-    if (!deferred) return;
+    if (!deferred) {
+      alert(
+        "To install: open this site in Chrome or Edge, then tap your browser menu → 'Install app' / 'Add to Home screen'.",
+      );
+      return;
+    }
     await deferred.prompt();
     const choice = await deferred.userChoice;
     if (choice.outcome === "accepted") setInstalled(true);

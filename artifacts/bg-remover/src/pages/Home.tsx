@@ -117,6 +117,71 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Get Our App */}
+      <section className="py-12">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="rounded-3xl bg-gradient-to-br from-primary/5 via-background to-accent/5 border border-border/60 shadow-sm p-8 md:p-10">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+              <div className="flex-1">
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Get Our App</h2>
+                <p className="text-muted-foreground mb-4 max-w-xl">
+                  Install our website as an app for a better experience. Available now on Google Play Store.
+                </p>
+                <div className="flex items-center gap-2 text-primary font-semibold text-sm mb-5">
+                  <CheckCircle2 className="w-4 h-4" /> Fast, Secure &amp; Easy to Use
+                </div>
+                <Button
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent("bgremover:install"));
+                  }}
+                  className="rounded-xl bg-gray-900 hover:bg-gray-800 text-white font-semibold px-6 h-11"
+                >
+                  Install Now
+                </Button>
+              </div>
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.dispatchEvent(new CustomEvent("bgremover:install"));
+                }}
+                className="inline-flex items-center gap-3 bg-black hover:bg-gray-900 transition-colors text-white rounded-xl px-5 py-3 self-start lg:self-center"
+                aria-label="Get it on Google Play"
+              >
+                <svg viewBox="0 0 32 32" className="w-8 h-8" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="play-a" x1="6" y1="3" x2="22" y2="16" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stopColor="#00C3FF" />
+                      <stop offset="1" stopColor="#1BE2FA" />
+                    </linearGradient>
+                    <linearGradient id="play-b" x1="6" y1="29" x2="22" y2="16" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stopColor="#FFCE00" />
+                      <stop offset="1" stopColor="#FFEA00" />
+                    </linearGradient>
+                    <linearGradient id="play-c" x1="22" y1="3" x2="22" y2="29" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stopColor="#DE2453" />
+                      <stop offset="1" stopColor="#FE3944" />
+                    </linearGradient>
+                    <linearGradient id="play-d" x1="6" y1="3" x2="6" y2="29" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stopColor="#11D574" />
+                      <stop offset="1" stopColor="#01F176" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M6.5 3.2 L19.5 11 L15.6 14.7 Z" fill="url(#play-a)" />
+                  <path d="M6.5 28.8 L19.5 21 L15.6 17.3 Z" fill="url(#play-b)" />
+                  <path d="M19.5 11 L25.5 14.5 C26.6 15.2 26.6 16.8 25.5 17.5 L19.5 21 L15.6 16 Z" fill="url(#play-c)" />
+                  <path d="M6.5 3.2 L15.6 16 L6.5 28.8 C5.9 28.5 5.5 27.9 5.5 27.2 L5.5 4.8 C5.5 4.1 5.9 3.5 6.5 3.2 Z" fill="url(#play-d)" />
+                </svg>
+                <div className="text-left leading-tight">
+                  <div className="text-[10px] uppercase tracking-wide opacity-90">Get it on</div>
+                  <div className="text-lg font-semibold -mt-0.5">Google Play</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Features preview */}
       <section id="features" className="py-20 bg-muted/30">
         <div className="container mx-auto px-4 md:px-6">
