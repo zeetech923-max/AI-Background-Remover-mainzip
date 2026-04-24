@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   UploadCloud, CheckCircle2, Sparkles, Layers, Zap, Shield,
-  Image as ImageLucide, ArrowRight, ChevronRight
+  Image as ImageLucide, ArrowRight, ChevronRight, Tag
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -12,11 +12,75 @@ import { BeforeAfterSlider } from "@/components/ui/before-after-slider";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SiteLayout from "@/components/SiteLayout";
+import { adminApi, type Post } from "@/lib/adminApi";
+
+const STATIC_BLOG_FALLBACK: BlogCard[] = [
+  {
+    href: "/articles/design-tips",
+    category: "Tutorial",
+    title: "Free Background Removal Guide vs bgRemover.us",
+    excerpt: "Learn how our free AI background remover compares to bgRemover.us premium services. Get professional results without the cost.",
+    coverImageUrl: null,
+    color: "from-blue-500/20 to-violet-500/20",
+  },
+  {
+    href: "/articles/ecommerce-guide",
+    category: "E-commerce",
+    title: "E-commerce Product Photography: Free vs Paid Tools",
+    excerpt: "Compare free background removal tools vs bgRemover.us for e-commerce. Save money while achieving professional product photos.",
+    coverImageUrl: null,
+    color: "from-green-500/20 to-teal-500/20",
+  },
+  {
+    href: "/articles/ai-vs-manual",
+    category: "Technology",
+    title: "AI Background Removal: Free Alternative to bgRemover.us",
+    excerpt: "Discover how our free AI tool performs against bgRemover.us. Get the same quality results without subscription fees.",
+    coverImageUrl: null,
+    color: "from-orange-500/20 to-rose-500/20",
+  },
+];
+
+type BlogCard = {
+  href: string;
+  category: string;
+  title: string;
+  excerpt: string;
+  coverImageUrl: string | null;
+  color: string;
+};
+
+const BLOG_COLORS = [
+  "from-pink-500/20 to-amber-500/20",
+  "from-cyan-500/20 to-blue-500/20",
+  "from-purple-500/20 to-fuchsia-500/20",
+];
 
 export default function Home() {
   const [, navigate] = useLocation();
   const heroFileInputRef = React.useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<BlogCard[]>(STATIC_BLOG_FALLBACK);
+
+  useEffect(() => {
+    adminApi
+      .listPosts()
+      .then((r) => {
+        const published = r.posts.filter((p: Post) => p.published).slice(0, 3);
+        if (published.length === 0) return;
+        const cards: BlogCard[] = published.map((p, i) => ({
+          href: `/articles/${p.slug}`,
+          category: "Blog",
+          title: p.title,
+          excerpt: p.excerpt || "",
+          coverImageUrl: p.coverImageUrl,
+          color: BLOG_COLORS[i % BLOG_COLORS.length],
+        }));
+        const merged = [...cards, ...STATIC_BLOG_FALLBACK].slice(0, 3);
+        setBlogPosts(merged);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleDragOver = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(true); };
   const handleDragLeave = (e: React.DragEvent) => { e.preventDefault(); setIsDragging(false); };
@@ -341,6 +405,77 @@ export default function Home() {
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
+      </section>
+
+      {/* Latest from our blog */}
+      <section className="py-20 bg-muted/30 border-y border-border">
+        <div className="container mx-auto px-4 md:px-6 max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+              Latest from our <span className="text-primary">blog</span>
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              Tips, tutorials, and insights about image editing and design
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {blogPosts.map((post, i) => (
+              <motion.div
+                key={post.href}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <Link href={post.href}>
+                  <a className="group block rounded-2xl bg-card border border-border overflow-hidden hover:border-primary/40 hover:shadow-xl transition-all h-full flex flex-col">
+                    {post.coverImageUrl ? (
+                      <div className="aspect-video overflow-hidden">
+                        <img
+                          src={post.coverImageUrl}
+                          alt=""
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className={`aspect-video bg-gradient-to-br ${post.color} flex items-center justify-center`}>
+                        <Tag className="w-12 h-12 text-foreground/20" />
+                      </div>
+                    )}
+                    <div className="p-6 flex-1 flex flex-col">
+                      <span className="text-xs font-semibold text-primary uppercase tracking-wide mb-2">
+                        {post.category}
+                      </span>
+                      <h3 className="font-bold text-lg leading-snug mb-3 group-hover:text-primary transition-colors">
+                        {post.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm line-clamp-3 mb-4 flex-1">
+                        {post.excerpt}
+                      </p>
+                      <span className="text-primary font-semibold text-sm inline-flex items-center gap-1">
+                        Read More <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                    </div>
+                  </a>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link href="/articles">
+              <Button size="lg" className="rounded-full px-8 h-12 font-semibold">
+                View All Articles
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
