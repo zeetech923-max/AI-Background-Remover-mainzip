@@ -17,8 +17,16 @@ const PostBody = z.object({
   metaTitle: z.string().default(""),
   metaDescription: z.string().default(""),
   metaKeywords: z.string().default(""),
+  focusKeyword: z.string().default(""),
+  canonicalUrl: z.string().default(""),
+  author: z.string().default(""),
+  ogTitle: z.string().default(""),
+  ogDescription: z.string().default(""),
   ogImageUrl: z.string().optional().nullable(),
+  twitterTitle: z.string().default(""),
+  twitterDescription: z.string().default(""),
   noindex: z.boolean().default(false),
+  nofollow: z.boolean().default(false),
   published: z.boolean().default(false),
 });
 

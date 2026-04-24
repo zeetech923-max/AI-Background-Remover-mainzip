@@ -77,15 +77,29 @@ export default function ArticlePost() {
         image={post.ogImageUrl || post.coverImageUrl || siteSettings.site_default_og_image}
         type="article"
         noindex={post.noindex}
+        nofollow={post.nofollow}
+        canonical={post.canonicalUrl || undefined}
+        author={post.author || undefined}
+        ogTitle={post.ogTitle}
+        ogDescription={post.ogDescription}
+        twitterTitle={post.twitterTitle}
+        twitterDescription={post.twitterDescription}
+        twitterHandle={siteSettings.twitter_handle}
+        publishedTime={post.createdAt}
+        modifiedTime={post.updatedAt}
       />
       <article className="container mx-auto px-4 md:px-6 py-12 md:py-16 max-w-3xl">
         <Link href="/articles" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1 mb-6">
           <ArrowLeft className="w-4 h-4" /> All articles
         </Link>
         <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }}>
+          {post.category && (
+            <div className="text-xs font-semibold text-primary uppercase tracking-wider mb-3">{post.category}</div>
+          )}
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">{post.title}</h1>
-          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-8">
-            <Calendar className="w-4 h-4" /> {formatDate(post.createdAt)}
+          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-8 flex-wrap">
+            <span className="inline-flex items-center gap-1.5"><Calendar className="w-4 h-4" /> {formatDate(post.createdAt)}</span>
+            {post.author && <span>· By {post.author}</span>}
           </div>
           {post.coverImageUrl && (
             <img src={post.coverImageUrl} alt="" className="w-full rounded-2xl mb-8 aspect-[16/9] object-cover" />
@@ -95,6 +109,16 @@ export default function ArticlePost() {
             className="prose prose-neutral dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={renderContent(post.content)}
           />
+          {post.tags && (
+            <div className="mt-12 pt-6 border-t flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground">Tags:</span>
+              {post.tags.split(",").map((t) => t.trim()).filter(Boolean).map((tag) => (
+                <span key={tag} className="text-xs px-2.5 py-1 rounded-full bg-muted text-foreground">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
         </motion.div>
       </article>
     </SiteLayout>

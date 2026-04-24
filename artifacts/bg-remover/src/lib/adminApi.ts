@@ -10,8 +10,16 @@ export type Post = {
   metaTitle: string;
   metaDescription: string;
   metaKeywords: string;
+  focusKeyword: string;
+  canonicalUrl: string;
+  author: string;
+  ogTitle: string;
+  ogDescription: string;
   ogImageUrl: string | null;
+  twitterTitle: string;
+  twitterDescription: string;
   noindex: boolean;
+  nofollow: boolean;
   published: boolean;
   createdAt: string;
   updatedAt: string;

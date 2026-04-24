@@ -329,8 +329,16 @@ function PostEditor({ initial, onCancel, onSaved }: { initial: Post | null; onCa
   const [metaTitle, setMetaTitle] = useState(initial?.metaTitle ?? "");
   const [metaDescription, setMetaDescription] = useState(initial?.metaDescription ?? "");
   const [metaKeywords, setMetaKeywords] = useState(initial?.metaKeywords ?? "");
+  const [focusKeyword, setFocusKeyword] = useState(initial?.focusKeyword ?? "");
+  const [canonicalUrl, setCanonicalUrl] = useState(initial?.canonicalUrl ?? "");
+  const [author, setAuthor] = useState(initial?.author ?? "");
+  const [ogTitle, setOgTitle] = useState(initial?.ogTitle ?? "");
+  const [ogDescription, setOgDescription] = useState(initial?.ogDescription ?? "");
   const [ogImageUrl, setOgImageUrl] = useState(initial?.ogImageUrl ?? "");
+  const [twitterTitle, setTwitterTitle] = useState(initial?.twitterTitle ?? "");
+  const [twitterDescription, setTwitterDescription] = useState(initial?.twitterDescription ?? "");
   const [noindex, setNoindex] = useState(initial?.noindex ?? false);
+  const [nofollow, setNofollow] = useState(initial?.nofollow ?? false);
   const [published, setPublished] = useState(initial?.published ?? false);
   const [saving, setSaving] = useState(false);
 
@@ -352,8 +360,16 @@ function PostEditor({ initial, onCancel, onSaved }: { initial: Post | null; onCa
         metaTitle,
         metaDescription,
         metaKeywords,
+        focusKeyword,
+        canonicalUrl,
+        author,
+        ogTitle,
+        ogDescription,
         ogImageUrl: ogImageUrl || null,
+        twitterTitle,
+        twitterDescription,
         noindex,
+        nofollow,
         published,
       };
       if (initial) await adminApi.updatePost(initial.id, body);
@@ -415,40 +431,106 @@ function PostEditor({ initial, onCancel, onSaved }: { initial: Post | null; onCa
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2"><Search className="w-5 h-5 text-primary" />SEO</CardTitle>
+            <CardTitle className="text-lg flex items-center gap-2"><Search className="w-5 h-5 text-primary" />SEO &amp; Meta Tags</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-5">
+            <div className="space-y-2">
+              <Label>Focus Keyword <span className="text-xs text-muted-foreground">(the main term you want to rank for)</span></Label>
+              <Input value={focusKeyword} onChange={(e) => setFocusKeyword(e.target.value)} placeholder="e.g. remove background from photo" />
+              {focusKeyword && (
+                <KeywordChecks
+                  keyword={focusKeyword}
+                  title={metaTitle || title}
+                  description={metaDescription || excerpt}
+                  slug={slug || slugify(title)}
+                  content={content}
+                />
+              )}
+            </div>
+
             <div className="space-y-2">
               <Label>Meta Title <span className="text-xs text-muted-foreground">(falls back to post title)</span></Label>
               <Input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} maxLength={70} placeholder={title || "SEO page title"} />
-              <div className="text-xs text-muted-foreground text-right">{metaTitle.length}/70</div>
+              <CharCounter value={metaTitle} good={[40, 60]} max={70} />
             </div>
             <div className="space-y-2">
               <Label>Meta Description</Label>
               <Textarea value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} rows={3} maxLength={160} placeholder="What this post is about, in 1-2 sentences." />
-              <div className="text-xs text-muted-foreground text-right">{metaDescription.length}/160</div>
+              <CharCounter value={metaDescription} good={[120, 158]} max={160} />
             </div>
             <div className="space-y-2">
               <Label>Meta Keywords <span className="text-xs text-muted-foreground">(comma-separated)</span></Label>
               <Input value={metaKeywords} onChange={(e) => setMetaKeywords(e.target.value)} placeholder="background removal, AI, photo editing" />
             </div>
             <div className="space-y-2">
-              <Label>Social Share Image (Open Graph)</Label>
-              <div className="flex gap-2">
-                <Input value={ogImageUrl} onChange={(e) => setOgImageUrl(e.target.value)} placeholder="Falls back to cover image" />
-                <ImagePickerDialog onPick={(url) => setOgImageUrl(url)}>
-                  <Button type="button" variant="outline">Pick</Button>
-                </ImagePickerDialog>
-              </div>
-              {(ogImageUrl || coverImageUrl) && (
-                <img src={ogImageUrl || coverImageUrl} alt="" className="mt-2 w-full max-w-sm aspect-[1.91/1] object-cover rounded border" />
-              )}
+              <Label>Canonical URL <span className="text-xs text-muted-foreground">(optional — only if this content lives elsewhere)</span></Label>
+              <Input value={canonicalUrl} onChange={(e) => setCanonicalUrl(e.target.value)} placeholder="https://yoursite.com/articles/this-post" type="url" />
             </div>
-            <div className="flex items-center gap-3 pt-2 border-t">
-              <Switch checked={noindex} onCheckedChange={setNoindex} id="noindex" />
-              <Label htmlFor="noindex" className="cursor-pointer">
-                Noindex (hide from Google &amp; sitemap)
-              </Label>
+            <div className="space-y-2">
+              <Label>Author</Label>
+              <Input value={author} onChange={(e) => setAuthor(e.target.value)} placeholder="e.g. Jane Doe" />
+            </div>
+
+            <SerpPreview
+              title={metaTitle || title}
+              description={metaDescription || excerpt}
+              slug={slug || slugify(title)}
+            />
+
+            <div className="border-t pt-4 space-y-3">
+              <h4 className="text-sm font-semibold">Open Graph (Facebook, LinkedIn)</h4>
+              <div className="space-y-2">
+                <Label>OG Title <span className="text-xs text-muted-foreground">(defaults to meta title)</span></Label>
+                <Input value={ogTitle} onChange={(e) => setOgTitle(e.target.value)} maxLength={95} placeholder={metaTitle || title} />
+              </div>
+              <div className="space-y-2">
+                <Label>OG Description</Label>
+                <Textarea value={ogDescription} onChange={(e) => setOgDescription(e.target.value)} rows={2} maxLength={200} placeholder={metaDescription || "Defaults to meta description"} />
+              </div>
+              <div className="space-y-2">
+                <Label>OG / Social Share Image (1200×630 recommended)</Label>
+                <div className="flex gap-2">
+                  <Input value={ogImageUrl} onChange={(e) => setOgImageUrl(e.target.value)} placeholder="Falls back to cover image" />
+                  <ImagePickerDialog onPick={(url) => setOgImageUrl(url)}>
+                    <Button type="button" variant="outline">Pick</Button>
+                  </ImagePickerDialog>
+                </div>
+                {(ogImageUrl || coverImageUrl) && (
+                  <SocialPreview
+                    image={ogImageUrl || coverImageUrl}
+                    title={ogTitle || metaTitle || title}
+                    description={ogDescription || metaDescription || excerpt}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="border-t pt-4 space-y-3">
+              <h4 className="text-sm font-semibold">Twitter / X</h4>
+              <div className="space-y-2">
+                <Label>Twitter Title</Label>
+                <Input value={twitterTitle} onChange={(e) => setTwitterTitle(e.target.value)} maxLength={70} placeholder={ogTitle || metaTitle || title} />
+              </div>
+              <div className="space-y-2">
+                <Label>Twitter Description</Label>
+                <Textarea value={twitterDescription} onChange={(e) => setTwitterDescription(e.target.value)} rows={2} maxLength={200} placeholder={ogDescription || metaDescription || "Defaults to OG description"} />
+              </div>
+            </div>
+
+            <div className="border-t pt-4 space-y-3">
+              <h4 className="text-sm font-semibold">Robots / Indexing</h4>
+              <div className="flex items-center gap-3">
+                <Switch checked={noindex} onCheckedChange={setNoindex} id="noindex" />
+                <Label htmlFor="noindex" className="cursor-pointer">
+                  Noindex <span className="text-xs text-muted-foreground">(hide from Google &amp; sitemap)</span>
+                </Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <Switch checked={nofollow} onCheckedChange={setNofollow} id="nofollow" />
+                <Label htmlFor="nofollow" className="cursor-pointer">
+                  Nofollow <span className="text-xs text-muted-foreground">(don't pass link equity from this page)</span>
+                </Label>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -512,6 +594,76 @@ function PostEditor({ initial, onCancel, onSaved }: { initial: Post | null; onCa
         </Card>
       </div>
     </form>
+  );
+}
+
+function CharCounter({ value, good, max }: { value: string; good: [number, number]; max: number }) {
+  const len = value.length;
+  const inGood = len >= good[0] && len <= good[1];
+  const tone = len === 0 ? "text-muted-foreground" : inGood ? "text-green-600" : len > max - 5 ? "text-red-600" : "text-amber-600";
+  return <div className={`text-xs text-right ${tone}`}>{len}/{max}</div>;
+}
+
+function SerpPreview({ title, description, slug }: { title: string; description: string; slug: string }) {
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://yoursite.com";
+  const display = `${origin.replace(/^https?:\/\//, "")} › articles › ${slug || "your-post-slug"}`;
+  return (
+    <div className="border rounded-lg p-4 bg-white text-left">
+      <div className="text-xs text-muted-foreground mb-1">Google Search Preview</div>
+      <div className="text-xs text-gray-600 truncate">{display}</div>
+      <div className="text-[#1a0dab] text-lg font-normal leading-snug mt-1 truncate">
+        {title || "Your post title"}
+      </div>
+      <div className="text-sm text-gray-700 mt-1 line-clamp-2">
+        {description || "Your meta description will appear here. Aim for 120–158 characters for the best display in Google."}
+      </div>
+    </div>
+  );
+}
+
+function SocialPreview({ image, title, description }: { image: string; title: string; description: string }) {
+  return (
+    <div className="mt-2 border rounded-lg overflow-hidden bg-white max-w-md">
+      <div className="aspect-[1.91/1] bg-muted">
+        <img src={image} alt="" className="w-full h-full object-cover" />
+      </div>
+      <div className="p-3 border-t">
+        <div className="text-xs text-muted-foreground uppercase">{typeof window !== "undefined" ? window.location.hostname : "yoursite.com"}</div>
+        <div className="font-semibold text-sm mt-0.5 line-clamp-2">{title || "Your post title"}</div>
+        <div className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{description}</div>
+      </div>
+    </div>
+  );
+}
+
+function KeywordChecks({
+  keyword, title, description, slug, content,
+}: { keyword: string; title: string; description: string; slug: string; content: string }) {
+  const k = keyword.trim().toLowerCase();
+  const plainContent = content.replace(/<[^>]+>/g, " ").toLowerCase();
+  const wordCount = plainContent.split(/\s+/).filter(Boolean).length;
+  const occurrences = k ? (plainContent.match(new RegExp(`\\b${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "g")) || []).length : 0;
+  const density = wordCount > 0 ? (occurrences / wordCount) * 100 : 0;
+
+  const checks = [
+    { ok: title.toLowerCase().includes(k), label: "Keyword in meta title" },
+    { ok: description.toLowerCase().includes(k), label: "Keyword in meta description" },
+    { ok: slug.toLowerCase().includes(k.replace(/\s+/g, "-")), label: "Keyword in URL slug" },
+    { ok: occurrences > 0, label: `Keyword appears in content (${occurrences}× / density ${density.toFixed(2)}%)` },
+    { ok: wordCount >= 300, label: `Content length: ${wordCount} words (aim for 300+)` },
+  ];
+
+  return (
+    <div className="mt-2 rounded-lg border bg-muted/30 p-3 space-y-1.5">
+      {checks.map((c) => (
+        <div key={c.label} className="flex items-start gap-2 text-xs">
+          <span className={`inline-flex w-4 h-4 rounded-full items-center justify-center text-[10px] font-bold flex-shrink-0 ${c.ok ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}`}>
+            {c.ok ? "✓" : "!"}
+          </span>
+          <span className={c.ok ? "text-foreground" : "text-muted-foreground"}>{c.label}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
