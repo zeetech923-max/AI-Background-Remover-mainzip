@@ -12,6 +12,13 @@ const PostBody = z.object({
   excerpt: z.string().default(""),
   content: z.string().default(""),
   coverImageUrl: z.string().optional().nullable(),
+  category: z.string().default(""),
+  tags: z.string().default(""),
+  metaTitle: z.string().default(""),
+  metaDescription: z.string().default(""),
+  metaKeywords: z.string().default(""),
+  ogImageUrl: z.string().optional().nullable(),
+  noindex: z.boolean().default(false),
   published: z.boolean().default(false),
 });
 

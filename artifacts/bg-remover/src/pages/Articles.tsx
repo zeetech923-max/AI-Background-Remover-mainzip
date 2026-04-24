@@ -2,8 +2,10 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import SiteLayout from "@/components/SiteLayout";
+import Seo from "@/components/Seo";
 import { ArrowRight, Clock, Tag } from "lucide-react";
 import { adminApi, type Post } from "@/lib/adminApi";
+import { useSiteSeo } from "@/hooks/useSiteSeo";
 
 const ARTICLES = [
   {
@@ -77,8 +79,15 @@ export default function Articles() {
     ...ARTICLES.map((a) => ({ ...a, coverImageUrl: null as string | null })),
   ];
 
+  const { settings: siteSettings, formatTitle } = useSiteSeo();
+
   return (
     <SiteLayout>
+      <Seo
+        title={formatTitle("Articles & Guides")}
+        description="Tutorials, tips, and insights about background removal, AI image editing, and visual content for your business."
+        image={siteSettings.site_default_og_image}
+      />
       <div className="container mx-auto px-4 md:px-6 py-16 max-w-5xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-14">
           <p className="text-primary font-semibold text-sm uppercase tracking-widest mb-3">Articles</p>

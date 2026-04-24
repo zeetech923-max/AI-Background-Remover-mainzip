@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { useRoute, Link } from "wouter";
 import { motion } from "framer-motion";
 import SiteLayout from "@/components/SiteLayout";
+import Seo from "@/components/Seo";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { adminApi, type Post } from "@/lib/adminApi";
+import { useSiteSeo } from "@/hooks/useSiteSeo";
 
 function formatDate(iso: string): string {
   try {
@@ -31,6 +33,8 @@ export default function ArticlePost() {
   const slug = params?.slug;
   const [post, setPost] = useState<Post | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const { settings: siteSettings, formatTitle } = useSiteSeo();
 
   useEffect(() => {
     if (!slug) return;
@@ -66,6 +70,14 @@ export default function ArticlePost() {
 
   return (
     <SiteLayout>
+      <Seo
+        title={formatTitle(post.metaTitle || post.title)}
+        description={post.metaDescription || post.excerpt}
+        keywords={post.metaKeywords}
+        image={post.ogImageUrl || post.coverImageUrl || siteSettings.site_default_og_image}
+        type="article"
+        noindex={post.noindex}
+      />
       <article className="container mx-auto px-4 md:px-6 py-12 md:py-16 max-w-3xl">
         <Link href="/articles" className="text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-1 mb-6">
           <ArrowLeft className="w-4 h-4" /> All articles

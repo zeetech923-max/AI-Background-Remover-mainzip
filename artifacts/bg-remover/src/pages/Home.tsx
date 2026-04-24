@@ -12,7 +12,9 @@ import { BeforeAfterSlider } from "@/components/ui/before-after-slider";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import SiteLayout from "@/components/SiteLayout";
+import Seo from "@/components/Seo";
 import { adminApi, type Post } from "@/lib/adminApi";
+import { useSiteSeo } from "@/hooks/useSiteSeo";
 
 const STATIC_BLOG_FALLBACK: BlogCard[] = [
   {
@@ -109,8 +111,16 @@ export default function Home() {
   const fadeIn = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.6 } } };
   const stagger = { hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } };
 
+  const { settings: siteSettings, formatTitle: siteFormat } = useSiteSeo();
+
   return (
     <SiteLayout>
+      <Seo
+        title={siteFormat()}
+        description={siteSettings.site_default_description || "AI-powered background removal in your browser. Remove backgrounds from photos in seconds — free, private, no uploads to a server."}
+        keywords={siteSettings.site_default_keywords || "background remover, AI photo editor, remove background, transparent png, photo background"}
+        image={siteSettings.site_default_og_image}
+      />
       {/* Hero */}
       <section className="pt-16 pb-20 md:pt-24 md:pb-32 overflow-hidden relative">
         <div className="absolute inset-0 -z-10 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />

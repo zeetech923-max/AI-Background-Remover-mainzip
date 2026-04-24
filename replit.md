@@ -6,12 +6,18 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 ## Admin Panel (BGRemover AI)
 
-- Visit `/admin` on the published site to log in.
-- Default password: `admin123` (set the `ADMIN_PASSWORD` environment variable to change it).
-- Manages: blog posts (CRUD + publish toggle), image gallery, and site settings (hero text, etc.).
-- Backed by Postgres via Drizzle ORM in the `api-server` artifact. Schema lives in `lib/db/src/schema/index.ts`.
-- API routes under `/api`: `auth`, `posts`, `gallery`, `settings`. Admin routes are gated by an HMAC-signed cookie (`bgr_admin`).
-- Public Articles page (`/articles`) and post page (`/articles/:slug`) read published posts from the database.
+WordPress-style CMS at `/admin`. Default password `admin123` (override with `ADMIN_PASSWORD` env var).
+
+Tabs:
+- **Overview** — stat cards (total/published/draft posts, media count) + recent posts list.
+- **Posts** — full editor: title, slug (auto-generated), excerpt, content (Markdown/HTML with H1/H2/Image insert helpers), featured image (gallery picker or URL), category, tags, draft/publish toggle. Per-post SEO panel: meta title, meta description (160 char counter), keywords, Open Graph image, noindex toggle. Search filter on the list.
+- **Media** — upload (multi), preview grid, copy URL, delete. Shared image picker dialog reused inside the post editor.
+- **SEO** — site-wide: site name, title template (`%s | Site`), default title/description/keywords, default OG image, Twitter handle, Google Search Console verification, GA Measurement ID, "block all search engines" toggle. Plus links to live `/api/sitemap.xml` and `/api/robots.txt`.
+- **Settings** — hero copy, tagline, contact email.
+
+Backed by Postgres via Drizzle ORM in the `api-server` artifact. Schema in `lib/db/src/schema/index.ts` (postsTable now includes category, tags, metaTitle, metaDescription, metaKeywords, ogImageUrl, noindex). API routes under `/api`: `auth`, `posts`, `gallery`, `settings`, `sitemap.xml`, `robots.txt`. Admin routes are gated by an HMAC-signed cookie (`bgr_admin`).
+
+Public pages use `<Seo>` (`src/components/Seo.tsx`) to inject `<title>`, description, keywords, canonical, Open Graph and Twitter Card meta tags. Site-wide settings are read via the cached `useSiteSeo` hook (`src/hooks/useSiteSeo.ts`). Sitemap auto-includes static routes plus every published, non-noindex post.
 
 ## Stack
 

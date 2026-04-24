@@ -5,6 +5,13 @@ export type Post = {
   excerpt: string;
   content: string;
   coverImageUrl: string | null;
+  category: string;
+  tags: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+  ogImageUrl: string | null;
+  noindex: boolean;
   published: boolean;
   createdAt: string;
   updatedAt: string;
