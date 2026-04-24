@@ -10,7 +10,7 @@ WordPress-style CMS at `/admin`. Default password `admin123` (override with `ADM
 
 Tabs:
 - **Overview** — stat cards (total/published/draft posts, media count) + recent posts list.
-- **Posts** — full editor: title, slug (auto-generated), excerpt, content (Markdown/HTML with H1/H2/Image insert helpers), featured image (gallery picker or URL), category, tags, draft/publish toggle. Per-post SEO panel: meta title, meta description (160 char counter), keywords, Open Graph image, noindex toggle. Search filter on the list.
+- **Posts** — WordPress-style WYSIWYG editor (TipTap/ProseMirror) with full toolbar: bold/italic/underline/strike/inline code, H1–H3, bullet/ordered/quote/code-block, alignment (left/center/right), link with prompt, image insert (uses media gallery picker), undo/redo/clear, plus a Visual ↔ HTML source toggle. Title, slug (auto-generated), excerpt (300 char counter), featured image (gallery picker or URL), category, tags, draft/publish toggle. Per-post SEO panel: meta title (70), meta description (160), keywords, Open Graph image, noindex toggle. Search filter on the list. Component lives at `src/components/RichTextEditor.tsx`; content stored as HTML and rendered via `dangerouslySetInnerHTML` on the public article page.
 - **Media** — upload (multi), preview grid, copy URL, delete. Shared image picker dialog reused inside the post editor.
 - **SEO** — site-wide: site name, title template (`%s | Site`), default title/description/keywords, default OG image, Twitter handle, Google Search Console verification, GA Measurement ID, "block all search engines" toggle. Plus links to live `/api/sitemap.xml` and `/api/robots.txt`.
 - **Settings** — hero copy, tagline, contact email.

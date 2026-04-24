@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { adminApi, fileToDataUrl, type Post, type GalleryImage } from "@/lib/adminApi";
+import RichTextEditor from "@/components/RichTextEditor";
 import {
   LogOut, Plus, Trash2, Upload, Save, Pencil, Eye, EyeOff,
   FileText, Image as ImageIcon, Settings as SettingsIcon, Search,
@@ -366,10 +367,6 @@ function PostEditor({ initial, onCancel, onSaved }: { initial: Post | null; onCa
     }
   };
 
-  const insertContent = (text: string) => {
-    setContent((c) => c + (c.endsWith("\n") || !c ? "" : "\n\n") + text);
-  };
-
   return (
     <form onSubmit={submit} className="grid lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 space-y-4">
@@ -395,17 +392,23 @@ function PostEditor({ initial, onCancel, onSaved }: { initial: Post | null; onCa
               <div className="text-xs text-muted-foreground text-right">{excerpt.length}/300</div>
             </div>
             <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <Label>Content (Markdown / HTML)</Label>
-                <div className="flex gap-1">
-                  <Button type="button" size="sm" variant="outline" onClick={() => insertContent("# Heading")}>H1</Button>
-                  <Button type="button" size="sm" variant="outline" onClick={() => insertContent("## Subheading")}>H2</Button>
-                  <ImagePickerDialog onPick={(url) => insertContent(`<img src="${url}" alt="" />`)}>
-                    <Button type="button" size="sm" variant="outline" className="gap-1"><ImageIcon className="w-3.5 h-3.5" />Insert Image</Button>
+              <Label>Content</Label>
+              <RichTextEditor
+                value={content}
+                onChange={setContent}
+                placeholder="Start writing your post… use the toolbar to format text, add headings, links, lists, and images."
+                onPickImage={(insert) => (
+                  <ImagePickerDialog onPick={(url) => insert(url)}>
+                    <button
+                      type="button"
+                      title="Insert image from media"
+                      className="p-1.5 rounded text-foreground hover:bg-muted transition-colors"
+                    >
+                      <ImageIcon className="w-4 h-4" />
+                    </button>
                   </ImagePickerDialog>
-                </div>
-              </div>
-              <Textarea value={content} onChange={(e) => setContent(e.target.value)} rows={16} className="font-mono text-sm" placeholder="# Your heading&#10;&#10;Write your post content here. Use blank lines to separate paragraphs. Raw HTML is supported." />
+                )}
+              />
             </div>
           </CardContent>
         </Card>
